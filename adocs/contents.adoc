@@ -1,0 +1,27 @@
+= contents +
+
+=== COVER Illustration +
+illustrations :tea +
+
+=== Page XX ~ XX +
+GPUで機械学習をやってみる::
+edit :ksakiyama +
+
+=== Page XX ~ XX +
+Arduinoに恋する夏::
+edit :MofuMofu +
+
+=== Page XX ~ XX +
+"What's IoT ?" --初めに知っておきたい"IoT"のコト::
+edit :MofuMofu +
+
+=== Page XX ~ XX +
+Arduinoに恋する夏::
+edit :MofuMofu +
+
+=== Page XX ~ XX +
+title::
+edit :keigodasu +
+
+=== Page XX +
+Afterword::

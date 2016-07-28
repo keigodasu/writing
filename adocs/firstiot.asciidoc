@@ -1,0 +1,308 @@
+= はじめてのIoT
+
+やっぱりーせっかく買ったら何かしてみたいと思いませんか？思いますよね？ +
+なのでーーーArduino使ってIoTの世界を体験してみましょうよ。そうしましょう。 +
+あ、そうそう、このネタははじめて本格的にITやる人に向けて書いているので、（特にわたし） +
+デキる皆さんはこのセクションはすっ飛ばしてもらうといいと思いますよ！ +
+
+== 今回の目標
+
+とは言いましても、何も目標がないと「うわー動いたー」で終わってしまいます。 +
+ものが動くのもそれはそれで楽しいですが…。 +
+自分があったら嬉しいものとか、思いつきのアイディアでもいいからなんか計画立ててみましょう。 +
+
+というわけで！今回の目標はこちら！！ +
+
+[big]#センサーで温度を測ってみたーーい！#
+
+…だって、なんかIoTっぽくない？普段も使えるだろうし。 +
+立ち上げるのがめんどくさい？そんな考えだから何もできないんじゃないか。 +
+
+== はじめてのセットアップ
+
+何事も準備は大事です。やっぱり。 +
+今回はArduino UNOを使ってみたいと思います。 +
+早速なので、繋げてみましょう。 +
+
+…とは言っても、Arduino用のUSBケーブルの四角っぽい端子と普通のUSB端子を繋げるだけです。 +
+簡単でしょ？ +
+
+あとは、Arduinoを動かすツールをインストールしてやればOKです。 +
+こちらのホームページにアクセスの上、Arduinoのプログラムをインストールします。 +
+
+ https://www.arduino.cc
+
+MacだったらMac用のもの、WindowsならWindows用のもの、LinuxはLinux用のものをどうぞ。 +
+だいたいダウンロードしたのものをダブルクリックして、ひたすら「次へ」を押すだけです。Windowsなら。 +
+Arduinoのプログラムがインストールできたら、いよいよ何かやってみたいと思います！ +
+
+== はじめてのLED
+
+じゃあ早速温度測ってみよーとか思っちゃいます？ +
+はやる気持ちはわかりますが、あまりオススメできません。 +
+せっかく買ってきたArduinoが壊れているか確かめておいたほうが良いからです。 +
+みんなに等しくコミケのサークル参加に当たる確率が与えられているのと同じくらい、 +
+壊れているArduinoを引く可能性もありえるわけです。 +
+ArduinoでLEDを光らせることができれば、壊れていないことが分かるわけです。 +
+
+.Arduinoをパソコンに読み込む
+まずはArduinoをセットアップしてやります。まず始めにArduinoのIDE（統合開発環境）を立ち上げます。 +
+「ファイル」→「スケッチの例」→「01.Basics」→「Blink」を選択します。
+
+image:../resources/images/iot/Arduino_Setup01.png[width=400]
+
+次に「ボード」→「Arduino Uno」の順に選択します。この時自分の持ってるArduinoの種類を選択してあげてください。 +
+こう見るといっぱい種類があるんですね。
+
+image:../resources/images/iot/Arduino_Setup02.png[width=400]
+
+で、最後に右向きの矢印ボタンを押してあげると、Arduinoを認識してくれるはずです。
+できなかった場合は以下を疑ってみてください。
+
+--
+. ボードの種類は間違っていないか +
+ボードの種類が違っていれば、Arduinoを読み取ることはできません。 +
+「そんなことない！」とか言わずに確認してみましょう。 +
+. ケーブルはしっかり刺さっているか +
+これも意外とあります。一度抜き差ししてみてはいかがでしょう。 +
+ちなみにArduinoの電源はPCから供給されているので、ケーブルを抜くと電源も切れます。 +
+--
+
+.LEDを光らせてみる
+通称「Lチカ」とかいうらしいです。
+Arduinoの「新規ファイル」を選択し、以下を書いてみます。
+
+----
+//LEDを光らせる
+
+//LEDを13番のデジタルポートに接続
+const int LED = 13;
+
+void setup()
+
+{
+  //電気の出力はデジタルピンから送る
+  pinMode(LED, OUTPUT);
+}
+
+void loop()
+{
+  //LEDを1000秒間隔で強く光らせる
+  digitalWrite(LED, HIGH);
+  delay(1000);
+  //LEDを1000秒間隔で弱く光らせる
+  digitalWrite(LED, LOW);
+  delay(1000);
+}
+----
+
+"//"はコメントアウトです。忘れないようにやっていることをメモしておくためにあります。 +
+人間忘れる生き物ですので、記録をつけることは週間にした方がいいと思います。 +
+久しぶりにプログラムを開けてみたときに、「これは何やってるんだろう」とかいうのはザラにあります。 +
+
+次に"void setup()"の部分ですが、ここにはArduinoからどうやって電気を通してあげるか、など +
+始めにArduinoに対して言っておかないといけないことを書いておきます。 +
+今回だと"LED"という変数は電気を送る先ということを示しています。 +
+初めの行で変数LEDを宣言しているので、そこに対する処理を書いているわけですね。なるほどー。 +
+
+"void loop"の部分ではLEDに対して何をするかを書いています。 +
+loop（ループ）と書いているくらいですので、中に書いてあることが繰り返し実行されます。 +
+今回は1000秒の間隔を開けてLEDを光らせます。digitalWriteの部分が光らせる処理というわけです。 +
+プログラムは上から下に実行されていくので、始めに強く光り、次に弱く光るはずです。
+
+.LEDとArduinoを繋げてみる
+やっぱり繋げてみないと始まりません。 +
+LEDは先が長い方がプラス（電気が入ってくるほう）、短い方がマイナス（電気が出て行くほう）になっています。 +
+プラスは動脈で、マイナスは静脈ってことですね。例えがグロいとかいう苦情は受け付けません。 +
+
+で、LEDのプラス側をArduinoの"DIGITAL"の13番に差し込みます。マイナスは"GND"と書いてあるところに差し込みます。 +
+さっきのプログラムと比べてみると、この部分が当てはまりますね。
+----
+//LEDを13番のデジタルポートに接続
+const int LED = 13;
+
+void setup()
+
+{
+  //電気の出力はデジタルピンから送る
+  pinMode(LED, OUTPUT);
+}
+----
+
+GNDは「グランド」と言って、電気のマイナス方向のことをいいます。 +
+電気は入ったら出て行く場所が必要なのですが、その部分のことを指します。 +
+泥棒だって入ったら出て行くってことです。関係ないか。 +
+
+.実行してみる
+
+最後にArduinoの画面左端の「検証」ボタンをクリックしてみると… +
+あら不思議、LEDが光ります！イメージはこんな感じ。 +
+
+image:../resources/images/iot/Arduino_Setup03.png[width=400]
+
+……わかんないって？やっぱり？ +
+だってテキストが白黒なんですもの。しょうがないって。 +
+とにもかくにも、これでArduinoは壊れていないことがわかりましたーぱちぱちぱち！！！ +
+次はいよいよ温度を測ってみたいと思います。
+
+== Hello,Johnny!
+
+ただ、ここでちょっと気になることが出てきます。 +
+Arduinoだけだと画像とか表示できなくない？とか思うわけです。 +
+Processingという言語を使うと、Arduinoからもらったセンサーの値などで絵を描けたりします。 +
+でも、*ArduinoとProcessingはそれ専用の言語でできているんです*。ベースはC言語ですが。 +
+新しいもの始めるんだったら、最近はやりの他でも使える言語がいいよなーとか思っちゃうわけですよ。 +
+
+で、ここで登場するのがJohnny-fiveなわけです。 +
+Johnny-fiveは芸能人の名前ではありません。今アツいJavascriptを使ってArduinoを動かすことができます。 +
+こりゃお買い得もんだぁ！！！ +
+というわけで、ここはJohnny-fiveを使うことにします。 +
+もちろんArduino言語でセンサー操作もできます。その方が情報量は多かったりします。 +
+
+.Node.jsとJohnny-fiveのセットアップ
+
+まずはNode.jsをインストールします。Johnny-fiveはNode.jsというサーバサイドJavascriptエンジン上で動くからです。 +
+エンジンっていうのは、パソコンをなんか動かすためのプログラムセットのことです。 +
+マックでいうところのハッピーセットってことです。 +
+
+Node.jsのインストールのために下記ホームページにアクセスし、"Recommented For Most Users"と書いてある方をクリックします。 +
+最新版を落とすと不具合に出くわす確率が高いためです。 +
+
+https://nodejs.org/en/
+
+image:../resources/images/iot/Arduino_Setup03.png[width=400]
+
+黒枠のほうを落とします。
+
+で、あとは次への繰り返しでインストールを進めていきます。 +
+この方法を取るとバージョンアップ対応は面倒ですが…しゃーない、今回は「やってみよう」のノリなので！ +
+別に本格的な開発もやんないし！！と、心の中で言い訳をしながら「次へ」をひたすら叩きます。 +
+ちなみにWindowsもMacもやることは一緒です。 +
+できたらコマンドプロンプト、もしくはターミナルを立ち上げて以下のコマンドを打ってみましょう。 +
+こんな感じで返ってくれば上出来です。インストールできてます。
+
+----
+# 打つコマンド
+node -v
+#出て欲しいもの
+v4.4.7
+----
+
+次に、Johnny-fiveをインストールします。 +
+まず、Javascriptをおいてあげる場所（ディレクトリといいます）を作ります。 +
+その次にJhonny-fiveをインストールしてあげればOKです！ +
+----
+// Johnny-five用の作業場所作成
+mkdir johnny5
+// johnny5 に移動
+cd johnny5
+// Jhonny-fiveのインストール
+npm install johnny-five
+
+// こんな感じの結果が返って来ればOK！
+MofuMofu-no-MacBook-Pro:jhonny5 MofuMofu$ npm install johnny-five
+-
+> serialport@3.1.2 install /Users/MofuMofu/jhonny5/node_modules/johnny-five/node_modules/serialport
+> node-pre-gyp install --fallback-to-build
+
+[serialport] Success: "/Users/MofuMofu/jhonny5/node_modules/johnny-five/node_modules/serialport/build/Release/serialport.node" is installed via remote
+johnny-five@0.9.60 node_modules/johnny-five
+├── lodash.debounce@4.0.6
+├── ease-component@1.0.0
+├── color-convert@1.2.2
+├── browser-serialport@2.0.3
+├── temporal@0.5.0
+├── nanotimer@0.3.10
+├── lodash.clonedeep@4.3.2 (lodash._baseclone@4.5.7)
+├── es6-shim@0.35.1
+├── firmata@0.12.0 (es6-shim@0.33.13)
+├── chalk@1.1.3 (supports-color@2.0.0, escape-string-regexp@1.0.5, ansi-styles@2.2.1, strip-ansi@3.0.1, has-ansi@2.0.0)
+└── serialport@3.1.2 (bindings@1.2.1, es6-promise@3.2.1, nan@2.4.0, commander@2.9.0, debug@2.2.0, object.assign@4.0.4)
+MofuMofu-no-MacBook-Pro:jhonny5 MofuMofu$
+----
+
+Johnny-five（もう次からJohnny5にします。）とArduinoは”Firmata"というプロトコルで通信します。 +
+プロトコルとはコンピューターの間で話をするための言語です。 +
+ArduinoのIDEを立ち上げ、「ファイル」→「スケッチの例」→「Firmata」→「StandardFirmata」を選択します。 +
+あとは右矢印をクリックしてArduinoにプログラムを焼き付けるだけです。 +
+
+これでJohnny5とArduinoがおしゃべりできるようになりました！
+
+.Johnnyで温度を測る
+
+今度はJohnny5を使ってセンサーを動かしてみたいと思います。先ほども述べましたが、 +
+Johnny5はJavascriptを使ってArduinoを動かすことができます！なのでJavascriptファイルを作ってあげます。 +
+先ほどJohnny5をインストールしたディレクトリに"tmpTest.js"というファイルを保存します。 +
+中身はこんな感じで。 +
+----
+//johnny-fiveを使うことを宣言する
+var five = require("johnny-five");
+
+five.Board().on("ready", function(){
+  var temperature = new five.Thermometer({
+    //気温センサーLM35を使う（専用のプログラムがここで適用される）
+    controller: "LM35",
+    //A0から入力があることを宣言
+    pin: "A0"
+    //5000ミリ秒たったら繰り返し
+    freq: 5000
+  });
+  //入力された値を気温に変換
+  temperature.on("change", function(){
+    //コンソールに摂氏・華氏で温度出力
+    console.log(this.celsius + "℃");
+  });
+});
+
+----
+
+で、プログラムを実行してみましょう。コマンドはこんな感じです。 +
+ sudo node tmpTest.js
+
+うまくコンパイルできていれば、こんな感じで結果が返ってくるはずです。 +
+やめたくなったときはCtl+Cを2回押します。 +
+----
+MofuMofu-no-MacBook-Pro:jhonny5 MofuMofu$ sudo node tmpTest.js
+1469108128497 Device(s) /dev/cu.usbmodem1411
+1469108128509 Connected /dev/cu.usbmodem1411
+1469108132328 Repl Initialized
+// 出力結果
+>> 36℃
+----
+…暑くね？(今エアコンが壊れてます) +
+とにかく、Johnny5を使ってArduinoを操作できました！ぱちぱちぱち！！！ +
+HTMLやAPIと組み合わせれば、できることが広がっていきそうです。わたしも勉強してみよーーっと！ +
+
+== 参考になる公式サイト集
+本を買うと高いしーというあなた。公式サイトがあるので載っけておきますね。 +
+ただし *英語* です。ほら、国際交流のために勉強しよっ！（適当） +
+
+. Arduinoの公式サイト
+Arduinoとは？はもちろん、事例とか具体例がいっぱいあります。 +
+公式にアカウントを作ると、実装例やサンプルコードを閲覧可能です。 +
+https://www.arduino.cc
+
+. Johnny-fiveのGitlab
+オープンソースといえばGitlabなイメージですね。Johnny-fiveもオープンソースなので。 +
+関係ないけどGitとGitlabとGithubって紛らわしいから名前変えて欲しいです。 +
+あ、そうそう、documentsってやつがサンプルコードになってます。今回もそれを参考にやってますーー +
+https://github.com/rwaldron/johnny-five
+
+. Node.jsの公式サイト
+ダウンロードはここからどうぞ。実は日本語サイトもあったりします。 +
+https://nodejs.org/en/
+
+. Johnny-fiveの公式サイト
+Jhonny-fiveで使えるAPIがまとまっています。APIっていうのはある一定の処理をまとめているプログラムのことです。 +
+あとサイトがおしゃれですね。やっぱり海外のサイトは色使いが綺麗です。 +
+http://johnny-five.io
+
+. Node.bots
+Jhonny-fiveを盛り上げちゃうぞー的なサイトです。今後はJavascriptでIoTするのが盛り上がりそうですね。 +
+https://github.com/rwaldron/johnny-five
+
+== 終わりに
+今回は触ってみよー的なところで終わってしまいました…。ポンコツですみません。 +
+サーバからHTMLや他サービスに温度とかを出せるといいですよねー。 +
+IT初めての人にはハードルがぐっと上がりますが、今後もちょっとずつ勉強してみたいと思います。 +
+で、また本をかけるように頑張ります。 +
